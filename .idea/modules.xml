@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../1/.idea/1.iml" filepath="$PROJECT_DIR$/../1/.idea/1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../AuthUsers/.idea/AuthUsers.iml" filepath="$PROJECT_DIR$/../AuthUsers/.idea/AuthUsers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Books/.idea/Books.iml" filepath="$PROJECT_DIR$/../Books/.idea/Books.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ProtoLib/.idea/ProtoLib.iml" filepath="$PROJECT_DIR$/../ProtoLib/.idea/ProtoLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Protos/.idea/Protos.iml" filepath="$PROJECT_DIR$/../Protos/.idea/Protos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ProtosLib/.idea/ProtosLib.iml" filepath="$PROJECT_DIR$/../ProtosLib/.idea/ProtosLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ReservationsService.iml" filepath="$PROJECT_DIR$/.idea/ReservationsService.iml" />
+    </modules>
+  </component>
+</project>
