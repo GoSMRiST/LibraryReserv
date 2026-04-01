@@ -4,6 +4,7 @@
     <inspection_tool class="GoDfaErrorMayBeNotNil" enabled="true" level="WARNING" enabled_by_default="true">
       <methods>
         <method importPath="AuthUsers/internal/services/restserv" receiver="DbService" name="GetUserByEmail" />
+        <method importPath="ReservationsService/internal/services/restserv" receiver="BookClientService" name="CheckBookAvailability" />
       </methods>
     </inspection_tool>
   </profile>

@@ -1,15 +1,13 @@
 package app
 
 import (
-	grpcapp "ReservationsService/internal/app/grpc"
+	restapp "ReservationsService/internal/app/rest"
+	"ReservationsService/internal/config"
 	"ReservationsService/internal/core"
 	"context"
+	"github.com/GoSMRiST/protosLibary/gen/go/auth"
 	"log/slog"
 )
-
-type App struct {
-	GRPCSrv *grpcapp.App
-}
 
 type ReservServise interface {
 	AddReservation(ctx context.Context, request *core.ReservationRequest) (*core.ReservationResponse, error)
@@ -17,18 +15,18 @@ type ReservServise interface {
 	CheckReservation(ctx context.Context, userId int) (*core.CheckReservResponse, error)
 }
 
-type BookClientService interface {
-	CheckBookAvailability(ctx context.Context, req *core.CheckAvailabilityRequest) (*core.CheckAvailabilityResponse, error)
+type App struct {
+	RestServ *restapp.RestReservApp
 }
 
 func NewApp(log *slog.Logger,
-	grpcPort int,
-	reservService ReservServise,
-	bookClient BookClientService,
+	cfg *config.Config,
+	restService ReservServise,
+	authClient auth.AuthClient,
 ) *App {
-	grpcApp := grpcapp.New(log, grpcPort, reservService, bookClient)
+	restApp := restapp.NewRestApp(log, cfg, restService, authClient)
 
 	return &App{
-		GRPCSrv: grpcApp,
+		RestServ: restApp,
 	}
 }

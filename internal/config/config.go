@@ -3,17 +3,18 @@ package config
 import (
 	"github.com/caarlos0/env/v9"
 	"github.com/joho/godotenv"
+	"time"
 )
 
 type Config struct {
-	ServPort    int    `env:"SERV_PORT"`
-	ServTimeout string `env:"SERV_TIMEOUT"`
-	DBHost      string `env:"DB_HOST"`
-	DBPort      int    `env:"DB_PORT"`
-	DBUser      string `env:"DB_USER"`
-	DBPassword  string `env:"DB_PASSWORD"`
-	DBName      string `env:"DB_NAME"`
-	LogLevel    string `env:"LOG_LEVEL"`
+	HostAddress string        `env:"REST_HOST_ADDRESS"`
+	ServTimeout time.Duration `env:"SERV_TIMEOUT"`
+	DBHost      string        `env:"DB_HOST"`
+	DBPort      int           `env:"DB_PORT"`
+	DBUser      string        `env:"DB_USER"`
+	DBPassword  string        `env:"DB_PASSWORD"`
+	DBName      string        `env:"DB_NAME"`
+	LogLevel    string        `env:"LOG_LEVEL"`
 }
 
 func InitConfig() *Config {

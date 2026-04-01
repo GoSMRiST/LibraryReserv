@@ -80,17 +80,12 @@ func (dataBase *DataBase) CloseReservation(ctx context.Context, request *core.Re
 	strQuery := `
 	UPDATE reservations
 		 SET return_at = NOW()
-		 WHERE user_id = $1
-		   AND author = $2
-		   AND title = $3
-		   AND return_at IS NULL
+		 WHERE id = $1
 `
 	cmdTag, err := dataBase.conn.Exec(
 		ctx,
 		strQuery,
-		request.UserID,
-		request.Author,
-		request.Title,
+		request.ReservationID,
 	)
 	if err != nil {
 		return status, err

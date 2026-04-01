@@ -6,9 +6,10 @@ import (
 	"ReservationsService/internal/config"
 	"ReservationsService/internal/repository"
 	"ReservationsService/internal/services/bookclientserv"
-	"ReservationsService/internal/services/reservserv"
+	"ReservationsService/internal/services/restserv"
 	"context"
 	"fmt"
+	"github.com/GoSMRiST/protosLibary/gen/go/auth"
 	"github.com/GoSMRiST/protosLibary/gen/go/book"
 	"google.golang.org/grpc"
 	"log/slog"
@@ -38,19 +39,19 @@ func main() {
 
 	db, err := repository.InitDataBase(ctx, connString)
 	if err != nil {
-		log.Info("failed to connect to database")
+		log.Error("failed to connect to database")
 		panic(err)
 	}
 
 	err = db.CreateTable(ctx)
 	if err != nil {
-		log.Info("failed to create table")
+		log.Error("failed to create table")
 		panic(err)
 	}
 
 	grpcBook, err := grpc.Dial("localhost:44045", grpc.WithInsecure())
 	if err != nil {
-		log.Info("failed to connect to book service")
+		log.Error("failed to connect to book service")
 		panic(err)
 	}
 
@@ -58,27 +59,51 @@ func main() {
 
 	bookClient := bookclient.NewBookClient(grpcBookClient)
 	if bookClient == nil {
-		log.Info("failed to create book client")
+		log.Error("failed to create book client")
 		panic(err)
 	}
+	defer func() {
+		if err := grpcBook.Close(); err != nil {
+			log.Error("failed to close grpc book service", "error", err)
+		}
+	}()
 
-	reservService := reservserv.NewReservService(log, db)
+	grpcAuth, err := grpc.Dial("localhost:44046", grpc.WithInsecure())
+	if err != nil {
+		log.Error("failed to connect to auth service", "error", err)
+		panic(err)
+	}
+	defer func() {
+		if err := grpcAuth.Close(); err != nil {
+			log.Info("failed to close grpc auth service: ", err)
+		}
+	}()
+
 	bookClientService := bookclientserv.NewBookClientServ(bookClient)
+	grpcAuthClient := auth.NewAuthClient(grpcAuth)
 
-	application := app.NewApp(log, cfg.ServPort, reservService, bookClientService)
+	reservRestService := restserv.NewRestReservService(log, db, bookClientService)
 
-	go application.GRPCSrv.MustRun()
+	application := app.NewApp(log, cfg, reservRestService, grpcAuthClient)
+
+	go application.RestServ.MustRun()
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
-	stopSign := <-stop
+	sign := <-stop
 
-	log.Info("stop signal", slog.Any("signal", stopSign))
+	log.Info("received signal", sign.String())
 
-	application.GRPCSrv.Stop()
+	ctxTimeout, cancel := context.WithTimeout(ctx, cfg.ServTimeout)
+	defer cancel()
 
-	log.Info("application stopped")
+	if err := application.RestServ.Stop(ctxTimeout); err != nil {
+		log.Error("failed to stop REST server", "error", err)
+		return
+	}
+
+	log.Info("rest server stopped")
 
 	if db.Close(ctx) != nil {
 		log.Info("fail to close database")

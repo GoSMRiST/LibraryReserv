@@ -34,10 +34,13 @@ func (c *BookClient) CheckAvailability(ctx context.Context, req *core.CheckAvail
 			switch st.Code() {
 
 			case codes.InvalidArgument:
-				return response, fmt.Errorf("book not found")
+				return response, core.ErrInvalidInput
 
 			case codes.Internal:
 				return response, fmt.Errorf("book service internal error")
+
+			case codes.NotFound:
+				return response, core.ErrNotFound
 
 			default:
 				return response, err
