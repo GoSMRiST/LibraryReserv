@@ -29,26 +29,6 @@ func (dataBase *DataBase) Close(ctx context.Context) error {
 	return dataBase.conn.Close(ctx)
 }
 
-func (dataBase *DataBase) CreateTable(ctx context.Context) error {
-	strQuery := `
-	CREATE TABLE IF NOT EXISTS reservations (
-		id SERIAL PRIMARY KEY,
-		user_id INTEGER NOT NULL,
-		author TEXT NOT NULL,
-		title TEXT NOT NULL,
-		taken_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-		return_at TIMESTAMPTZ
-	);
-`
-
-	_, err := dataBase.conn.Exec(ctx, strQuery)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (dataBase *DataBase) AddReservation(ctx context.Context, request *core.ReservationRequest) (*core.ReservationResponse, error) {
 	response := &core.ReservationResponse{ReservationStatus: false}
 

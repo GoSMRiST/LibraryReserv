@@ -43,12 +43,6 @@ func main() {
 		panic(err)
 	}
 
-	err = db.CreateTable(ctx)
-	if err != nil {
-		log.Error("failed to create table")
-		panic(err)
-	}
-
 	grpcBook, err := grpc.Dial("localhost:44045", grpc.WithInsecure())
 	if err != nil {
 		log.Error("failed to connect to book service")
