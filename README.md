@@ -128,16 +128,6 @@ curl -X POST http://localhost:8080/reservations \
 
 ---
 
-## 📌 Планы по развитию
-
-* [ ] Проверка доступности книги через Books Service (gRPC)
-* [ ] Ограничение количества броней
-* [ ] Docker support
-* [ ] Логирование
-* [ ] Тесты
-
----
-
 ## 👤 Автор
 
 * GitHub: https://github.com/GoSMRiST
