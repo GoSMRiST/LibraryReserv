@@ -15,6 +15,7 @@
 * 🔗 Интеграция с другими сервисами (например, Books Service)
 * 🔐 Авторизация через middleware
 * 🗄️ Работа с БД через repository слой
+* Работа с Docker
 
 ---
 
@@ -25,6 +26,7 @@
 * **REST API**
 * **PostgreSQL**
 * **SQL migrations**
+* **Docker**
 
 ---
 
@@ -46,6 +48,7 @@
 ├── migrations/            # SQL миграции
 ├── go.mod
 └── go.sum
+└── Dockerfile
 ```
 
 ---
@@ -55,11 +58,11 @@
 Создайте `.env` файл:
 
 ```env
-DB_HOST=localhost
+DB_HOST=host.docker.internal
 DB_PORT=5432
 DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=reservations
+DB_PASSWORD=DataBasePostgresPass
+DB_NAME=BooksReserv
 ```
 
 ---
@@ -92,7 +95,7 @@ go run cmd/app/main.go
 
 * `POST /reservations` — создать бронь
 * `GET /reservations` — получить список броней
-* `DELETE /reservations/{id}` — отменить бронь
+* `PATCH /reservations/:id/close` — закрыть бронь
 
 ---
 
