@@ -43,7 +43,7 @@ func main() {
 		panic(err)
 	}
 
-	grpcBook, err := grpc.Dial("localhost:44045", grpc.WithInsecure())
+	grpcBook, err := grpc.Dial("books-service:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Error("failed to connect to book service")
 		panic(err)
@@ -62,7 +62,7 @@ func main() {
 		}
 	}()
 
-	grpcAuth, err := grpc.Dial("localhost:44046", grpc.WithInsecure())
+	grpcAuth, err := grpc.Dial("auth-service:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Error("failed to connect to auth service", "error", err)
 		panic(err)

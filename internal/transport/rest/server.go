@@ -13,7 +13,7 @@ import (
 type ServiceInterface interface {
 	AddReservation(ctx context.Context, request *core.ReservationRequest) (*core.ReservationResponse, error)
 	CloseReservation(ctx context.Context, request *core.ReturnRequest) (*core.ReturnResponse, error)
-	CheckReservation(ctx context.Context, userId int) (*core.CheckReservResponse, error)
+	CheckReservation(ctx context.Context) (*core.CheckReservResponse, error)
 }
 
 type RestReservServer struct {
@@ -146,18 +146,7 @@ func (s *RestReservServer) CloseReservation(ctx *gin.Context) {
 }
 
 func (s *RestReservServer) CheckReservation(ctx *gin.Context) {
-	var req core.CheckReservRequest
-
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		s.log.Error("Bind json err: ", err)
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status": "error",
-			"error":  core.ErrInvalidInput,
-		})
-		return
-	}
-
-	resp, err := s.service.CheckReservation(ctx.Request.Context(), req.UserID)
+	resp, err := s.service.CheckReservation(ctx.Request.Context())
 	if err != nil {
 		switch {
 		case errors.Is(err, core.ErrInvalidInput):

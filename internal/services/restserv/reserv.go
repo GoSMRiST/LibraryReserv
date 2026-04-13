@@ -37,6 +37,8 @@ func (s *RestReservService) AddReservation(ctx context.Context, request *core.Re
 		return nil, core.ErrUnauthorized
 	}
 
+	request.UserID = tokenData.UserID
+
 	if tokenData.Role == "user" {
 		return nil, core.ErrNoRights
 	}
@@ -90,14 +92,16 @@ func (s *RestReservService) CloseReservation(ctx context.Context, request *core.
 	return s.db.CloseReservation(ctx, request)
 }
 
-func (s *RestReservService) CheckReservation(ctx context.Context, userId int) (*core.CheckReservResponse, error) {
+func (s *RestReservService) CheckReservation(ctx context.Context) (*core.CheckReservResponse, error) {
 	tokenData, ok := ctx.Value(core.TokenDataKey).(core.TokenData)
 	if !ok {
 		s.log.Warn("token data not found in context")
 		return nil, core.ErrUnauthorized
 	}
 
-	if userId < 1 {
+	s.log.Info("TokenData:", tokenData)
+
+	if tokenData.UserID < 1 {
 		return nil, core.ErrInvalidInput
 	}
 

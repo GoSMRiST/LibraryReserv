@@ -12,7 +12,7 @@ import (
 type ReservServise interface {
 	AddReservation(ctx context.Context, request *core.ReservationRequest) (*core.ReservationResponse, error)
 	CloseReservation(ctx context.Context, request *core.ReturnRequest) (*core.ReturnResponse, error)
-	CheckReservation(ctx context.Context, userId int) (*core.CheckReservResponse, error)
+	CheckReservation(ctx context.Context) (*core.CheckReservResponse, error)
 }
 
 type App struct {

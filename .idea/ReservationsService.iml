@@ -11,5 +11,6 @@
     <orderEntry type="module" module-name="ProtoLib" />
     <orderEntry type="module" module-name="ProtosLib" />
     <orderEntry type="module" module-name="AuthUsers" />
+    <orderEntry type="module" module-name="GoLand" />
   </component>
 </module>
